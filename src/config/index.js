@@ -19,8 +19,10 @@ const Envconfig = {
 }
 
 export default {
+    namespace:"manager",
     env,
     mock:true,
-    // 展开运算符 ...Envconfig[env] 会将这个对象的属性展开并合并到导出的对象中。
     ...Envconfig[env]
+    // 展开运算符 ...Envconfig[env] 会将这个对象的属性展开并合并到导出的对象中。
+    // (既包含baseApi又包含mockApi)
 }
