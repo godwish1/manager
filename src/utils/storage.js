@@ -1,5 +1,6 @@
 /**
  * @author kaituo
+ * 操作浏览器本地存储（localStorage）的工具函数 
  */
 import config from "../config";
 

@@ -30,7 +30,7 @@ service.interceptors.response.use((res) => {
     //debugger;
     if (code === 200) { // 如果状态码是 200，表示成功
         return data; // 返回数据
-    } else if (code === 40001) { // 如果状态码是 40001，表示 Token 失效
+    } else if (code === 50001) { // 如果状态码是 40001，表示 Token 失效
         ElMessage.error(TOKEN_INVALID); // 显示 Token 失效的错误消息
         setTimeout(() => {
             router.push('/login'); // 15 秒后重定向到登录页面
@@ -51,7 +51,9 @@ function request(options){
     if(options.method.toLowerCase() === 'get'){
         options.params = options.data;
     }
-
+    if(typeof options.mock != 'undefined'){
+        config.mock = options.mock;
+    }
     if (config.env === 'prod'){
         service.defaults.baseURL = config.baseApi;
     }else{

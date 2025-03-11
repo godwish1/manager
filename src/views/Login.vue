@@ -1,23 +1,24 @@
 <template>
     <div class="login-wrapper">
         <div class="modal">
-            <el-form>
+            <el-form ref="userForm" :model="user" :rules="rules" status-icon>
                 <div class="login-title">登录</div>
-                <el-form-item>
-                    <el-input type="text">
+                <el-form-item prop="userName">
+                    <el-input type="text" v-model="user.userName" placeholder="请输入用户名" clearable>
                         <template #prefix>
                             <el-icon><User /></el-icon>
-                        </template></el-input>
+                        </template>
+                    </el-input>
                 </el-form-item>
-                <el-form-item>
-                    <el-input type="password">
+                <el-form-item prop="userPwd">
+                    <el-input type="password" v-model="user.userPwd" placeholder="请输入密码" clearable>
                         <template #prefix>
                             <el-icon><Lock /></el-icon>
                         </template>
                     </el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button class="btn-login" type="primary" @click="goHome">登录</el-button>
+                    <el-button class="btn-login" type="primary" @click="login">登录</el-button>
                 </el-form-item>
 
             </el-form>
@@ -27,29 +28,54 @@
 
 
 <script>
-import Welcome from './Welcome.vue'
 // import { User } from '@element-plus/icons-vue';
 //options API 选项式API方法跳转 (vue2)
 export default {
-    components: { 
-        Welcome, 
-        
-    },
     // 定义组件的名称为 "Login"
     name: "Login",
-
-    mounted() {
-        this.$request.get('/login', { name: 'jack' }, { mock: true, loading: true }).then(res => {
-            console.log(res)
-        }).catch(err => {
-            console.log(err)
-        })
+    data(){
+        return {
+            user:{
+                userName:'',
+                userPwd:''
+            },
+            rules:{
+                userName:[
+                    {required:true,message:'请输入用户名',trigger:'blur'}
+                ],
+                userPwd:[
+                    {required:true,message:'请输入密码',trigger:'blur'},
+                    { min: 6, message: '密码长度不能少于 6 位', trigger: 'blur' }
+                ]
+            }
+        }
     },
+    // mounted() {
+    //     this.$request.get('/login', { name: 'jack' }, { mock: true, loading: true }).then(res => {
+    //         console.log(res)
+    //     }).catch(err => {
+    //         console.log(err)
+    //     })
+    // },
 
     methods: {
-        goHome() {// 定义一个名为 goHome 的方法
-            this.$router.push('/welcome')
-        }
+        login(){
+            this.$refs.userForm.validate((valid) => {
+                if (valid) {
+                    this.$api.login(this.user).then(res => {
+                        this.$store.commit('saveUserInfo', res); //保存用户信息到localStorage
+                        this.$router.push('/welcome')
+                        ElMessage.success(response.data.msg || '登录成功');
+                    })
+                   
+                } else {
+                    ElMessage.error(response.data.msg || '登录失败');
+                    return false;
+                }
+            });
+
+        },
+
     }
 }
 
