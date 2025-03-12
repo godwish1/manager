@@ -11,10 +11,16 @@ export default defineConfig({
     port:8080,
     
     //增加代理用来访问后端接口
-    proxy:{
-      '/api':{
-        target:'http://localhost:3000',
+    // 增加代理用来访问后端接口
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
       }
+      // '/mock': {
+      //   target: 'http://localhost:7300',
+      //   changeOrigin: true,
+      //   rewrite: (path) => path.replace(/^\/mock/, '')
+      // }
     }
   },
   plugins: [

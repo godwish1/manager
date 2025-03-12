@@ -65,7 +65,7 @@ export default {
                     this.$api.login(this.user).then(res => {
                         this.$store.commit('saveUserInfo', res); //保存用户信息到localStorage
                         this.$router.push('/welcome')
-                        ElMessage.success(response.data.msg || '登录成功');
+                        ElMessage.success(response.data.msg || '登录成功');//添加成功提示
                     })
                    
                 } else {
