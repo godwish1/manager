@@ -34,6 +34,7 @@
             <!-- Bell按钮 -->
             <el-icon class="bell-icon"><Bell /></el-icon>
           </el-badge>
+          <!-- 下拉菜单 -->
           <el-dropdown @command="handleLogout">
             <span class="user-link">
               {{ userInfo.userName }}
@@ -49,9 +50,7 @@
         </div>
       </div>
       <div class="wrapper">
-        <div class="home-page">
           <router-view></router-view>
-        </div>
       </div>
     </div>
   </div>
@@ -203,7 +202,7 @@ export default {
         .bell-icon {
           font-size: 24px; // 调整图标大小
           margin-top: 1px;
-          color: #409eff;
+          color: #111213;
         }
       }
     }

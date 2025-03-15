@@ -15,7 +15,7 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://localhost:3000',
-      }
+      },
       // '/mock': {
       //   target: 'http://localhost:7300',
       //   changeOrigin: true,

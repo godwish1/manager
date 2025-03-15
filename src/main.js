@@ -1,8 +1,8 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'; //index.js可以省略
-// import ElementPlus from 'element-plus'
-// import 'element-plus/dist/index.css'
+//import ElementPlus from 'element-plus'
+//import 'element-plus/dist/index.css'
 import request from './utils/request';
 import storage from './utils/storage';
 import elementIcon from "./plugins/icons" //引入element-plus的图标

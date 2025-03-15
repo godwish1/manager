@@ -7,7 +7,7 @@ export default {
         return request({
             url:"/users/login",
             method:"post",
-            data:params,
+            data:params, //这里还是调用后端接口
         })
     },
 
@@ -16,6 +16,7 @@ export default {
             url:"/leave/count",
             method:"get",
             data:{},
+            mock:true //单独走mock
         })
     },
 
@@ -24,6 +25,44 @@ export default {
             url:"/menu/list",
             method:"get",
             data:{},
+            mock:true
+        })
+    },
+    getUserList(params){
+        return request({
+            url:"/users/list",
+            method:"get",
+            data: params,
+        })
+    },
+    userDel(params){
+        return request({
+            url:"/users/delete",
+            method:"post",
+            data: params,
+        })
+    },
+    getRoleList(){
+        return request({
+            url:"/roles/alllist",
+            method:"get",
+            data:{},
+            mock:true
+        })
+    },
+    getDeptList(){
+        return request({
+            url:"/dept/list",
+            method:"get",
+            data:{},
+            mock:true
+        })
+    },
+    userSubmit(params){
+        return request({
+            url:"/users/operate",
+            method:"post",
+            data:params,
         })
     }
 }

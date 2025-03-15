@@ -11,6 +11,7 @@ const routes = [
         },
         component:Home,
         redirect:"/welcome",
+        
         children:[
             {
                 name:"welcome",
@@ -19,9 +20,15 @@ const routes = [
                     title:"欢迎页"
                 },
                 component:()=>import("../views/Welcome.vue"), //懒加载
-                
-            
-            }
+            },
+            {
+                name:"user",
+                path:"/user",
+                meta:{
+                    title:"用户管理"
+                },
+                component:()=>import("../views/User.vue") //懒加载
+            },
       
         ]
     },

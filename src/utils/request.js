@@ -36,8 +36,8 @@ service.interceptors.response.use((res) => {
     } else if (code === 50001) { // 如果状态码是 40001，表示 Token 失效
         ElMessage.error(TOKEN_INVALID); // 显示 Token 失效的错误消息
         setTimeout(() => {
-            router.push('/login'); // 15 秒后重定向到登录页面
-        }, 15000);
+            router.push('/login'); // 1.5秒后重定向到登录页面
+        }, 1500);
         return Promise.reject(TOKEN_INVALID); // 返回一个被拒绝的 Promise，携带错误信息
     } else { // 其他错误
         ElMessage.error(msg || NETWORK_ERROR); // || 用于在 msg 为空或未定义时提供一个默认值
@@ -54,13 +54,14 @@ function request(options){
     if(options.method.toLowerCase() === 'get'){
         options.params = options.data;
     }
+    let isMock = config.mock;
     if(typeof options.mock != 'undefined'){
-        config.mock = options.mock;
+        isMock = options.mock;
     }
     if (config.env === 'prod'){
         service.defaults.baseURL = config.baseApi;
     }else{
-        service.defaults.baseURL = config.mock ? config.mockApi : config.baseApi;
+        service.defaults.baseURL = isMock ? config.mockApi : config.baseApi;
     }
 
     return service(options);//返回一个axios对象
