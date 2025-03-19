@@ -8,12 +8,11 @@
        </div>
        <!-- 导航菜单 -->
         <el-menu 
+          router
         :default-active="activMenu" 
-        :collapse="isCollapse" 
-        router 
+        :collapse="isCollapse"  
         background-color="#001529" 
         text-color="#fff"
-         
         class="nav-menu">
         <!-- 传递菜单到树形菜单 -->
         <TreeMenu :userMenu="userMenu"/>
@@ -30,8 +29,14 @@
           </div>
         </div>
         <div class="user-info">
-          <el-badge :is-dot="noticeCount > 0 ? true : false" class="notice" type="danger" @click="$router.push('/audit/approve')">
-            <!-- Bell按钮 -->
+           <!-- Bell按钮 + 通知角标提示，注释的是显示圆点提示  
+            :is-dot="noticeCount > 0 ? true : false" -->
+          <el-badge 
+            class="notice" 
+            type="danger" 
+            @click="$router.push('/audit/approve')"
+            :value="noticeCount">
+
             <el-icon class="bell-icon"><Bell /></el-icon>
           </el-badge>
           <!-- 下拉菜单 -->
@@ -108,7 +113,8 @@ export default {
     async getNoticeCount() {
       try {
         const count = await this.$api.noticeCount();
-        this.noticeCount = count;
+        //这里noticeCount可以直接返回3是因为request.js中设置了code==200，直接返回data
+        this.noticeCount = count;  
       } catch (error) {
         console.error(error);
       }
@@ -212,7 +218,7 @@ export default {
         .bell-icon {
           font-size: 24px; // 调整图标大小
           margin-top: 1px;
-          color: #111213;
+          color: #044a8f;
         }
       }
     }

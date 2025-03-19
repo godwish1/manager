@@ -81,6 +81,15 @@ export default {
             mock:true
         })
     },
+    roleUpdatePermission(params){
+        return request({
+            url:"roles/update/permission",
+            method:"post",
+            data:params,
+            mock:true
+        })
+    },
+    //部门列表
     getDeptList(){
         return request({
             url:"/dept/list",

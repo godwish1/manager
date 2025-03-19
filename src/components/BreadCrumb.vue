@@ -11,6 +11,7 @@
     
 
 <script>
+//通过动态展示当前路由的层级路径（如 首页 > 用户管理 > 编辑），让用户知道当前所处位置。也可以点击路由进行跳转
 export default {
     name: "BreadCrumb",
     computed: {

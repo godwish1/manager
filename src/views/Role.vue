@@ -27,7 +27,7 @@
         <el-table-column label="操作" width="270">
           <template #default="scope">
             <el-button size="default" @click="handleEdit(scope.row)">编 辑</el-button>
-            <el-button size="default">设置权限</el-button>
+            <el-button size="default" @click="handleOpenPermission(scope.row)">设置权限</el-button>
             <el-button type="danger" size="default" @click="handleDel(scope.row._id)">删 除</el-button>
           </template>
         </el-table-column>
@@ -57,21 +57,25 @@
         </span>
       </template>
     </el-dialog>
-    <!-- 权限弹窗 -->
-    <el-dialog title="角色新增" v-model="showModal">
-      <el-form ref="dialogForm" :model="roleForm" label-width="100px" :rules="rules">
 
-        <el-form-item label="角色名称" prop="roleName">
-          <el-input v-model="roleForm.roleName" placeholder="请输入角色名称" />
+    <!-- 权限弹窗 -->
+    <el-dialog title="权限设置" v-model="showPermissionModal">
+      <el-form label-width="100px">
+
+        <el-form-item label="角色名称">
+          {{ curRoleName }}
         </el-form-item>
-        <el-form-item label="角色备注" prop="remark">
-          <el-input v-model="roleForm.remark" placeholder="请输入备注" />
+        <el-form-item label="选择权限">
+          <!-- tree树形控件 -->
+          <el-tree ref="treeRef" style="max-width: 600px" :data="menuList" show-checkbox default-expand-all
+            node-key="_id" highlight-current :props="{ label: 'menuName' }" />
+
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="handleClose">取 消</el-button>
-          <el-button type="primary" @click="handleSubmit">确 定</el-button>
+          <el-button @click="showPermissionModal = false">取 消</el-button>
+          <el-button type="primary" @click="handlePermissionSubmit">确 定</el-button>
         </span>
       </template>
     </el-dialog>
@@ -81,6 +85,7 @@
 
 <script>
 import utils from "@/utils/utils";
+import { ElMessage } from "element-plus";
 import { cloneDeep } from 'lodash-es'
 
 export default {
@@ -107,7 +112,20 @@ export default {
         },
         {
           label: "权限列表",
-          prop: "menuType",
+          prop: "permissionList",
+         
+          //此处用箭头函数使得this指向Vue组件实例
+          formatter:(row, column, value)=> {
+            let name = [];
+            let list = value.halfCheckedKeys || [];
+            list.map((key) =>{
+              if(key) {
+                name.push(this.actionMap[key]); // 指向 Vue 组件实例的 actionMap
+              }
+            });
+            return name.join(',');
+          }
+
         },
         {
           label: "创建时间",
@@ -126,20 +144,27 @@ export default {
       },
       //弹窗显示控制
       showModal: false,
-      roleForm: {
+      showPermissionModal: false,
 
-      },
+      roleForm: {},
       //表单验证规则
       rules: {
         roleName: [
           { required: true, message: '请输入用户名', trigger: 'blur' },  //添加正则 //trigger 表示触发验证的时机
         ],
-      }
+      },
+      //编辑权限弹窗属性
+      curRoleId: '',
+      curRoleName: '',
+      menuList: [],
+      //权限菜单映射表
+      actionMap:{},
 
     };
   },
   mounted() {
     this.getRoleList();
+    this.getMenuList();
   },
   methods: {
     // 角色列表初始化
@@ -148,6 +173,16 @@ export default {
         let { list, page } = await this.$api.getRoleList(this.queryForm);
         this.roleList = list;
         this.pager.total = page.total; //数据包含分页信息，要设置分页变量接收
+      } catch (e) {
+        throw new Error(e);
+      }
+    },
+    // 菜单列表初始化
+    async getMenuList() {
+      try {
+        let list = await this.$api.getMenuList();
+        this.menuList = list;
+        this.getActionMap(list);
       } catch (e) {
         throw new Error(e);
       }
@@ -216,6 +251,58 @@ export default {
     handleCurrentChange(pageNum) {
       this.pager.page = pageNum; // ✅ 修改 this.pager.page
       this.getRoleList();
+    },
+    handleOpenPermission(row) {
+      this.curRoleId = row._id;
+      this.curRoleName = row.roleName;
+      this.showPermissionModal = true;
+      let { checkedKeys } = row.permissionList;
+      this.$nextTick(() => {
+        this.$refs.treeRef.setCheckedKeys(checkedKeys); // tree树形控件提供的setCheckedKeys:设置目前选中的节点
+      });
+    },
+    //权限设置表单弹出提交
+    async handlePermissionSubmit() {
+      let nodes = this.$refs.treeRef.getCheckedNodes();
+      let halfKeys = this.$refs.treeRef.getHalfCheckedKeys();
+      let checkedKeys = [];
+      let parentKeys = [];
+      nodes.map(node => {
+        if (!node.children) {
+          checkedKeys.push(node._id);
+        } else {
+          parentKeys.push(node._id);
+        }
+      });
+      let params = {
+        _id: this.curRoleId,
+        permissionList: {
+          checkedKeys: checkedKeys,
+          halfCheckedKeys: parentKeys.concat(halfKeys),
+        }
+      };
+      await this.$api.roleUpdatePermission(params);
+      this.showPermissionModal = false;
+      ElMessage.success('权限设置成功');
+      this.getRoleList();
+    },
+    //递归获取权限按钮列表  深度优先遍历（DFS）
+    getActionMap(list) {
+      let actionMap = {};
+      const deep = (arr) => {
+        while (arr.length) {
+          let item = arr.pop();  // pop 删除并返回数组的最后一个元素
+          if (item.action && item.children) {
+            actionMap[item._id] = item.menuName;
+          }
+          if (item.children && !item.action) {
+            deep(item.children);
+          }
+        }
+      }
+      deep(JSON.parse(JSON.stringify(list))); //深拷贝
+      //deep(cloneDeep(list)); // 更安全的深拷贝
+      this.actionMap = actionMap;
     },
   }
 }
