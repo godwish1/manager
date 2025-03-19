@@ -20,12 +20,19 @@ export default {
         })
     },
 
-    getMenuList(){
+    getMenuList(params){
         return request({
             url:"/menu/list",
             method:"get",
-            data:{},
-            mock:true
+            data:params,
+            //mock:true
+        })
+    },
+    menuSubmit(params){
+        return request({
+            url:"/menu/operate",
+            method:"post",
+            data:params,
         })
     },
     getUserList(params){
@@ -42,11 +49,35 @@ export default {
             data: params,
         })
     },
-    getRoleList(){
+    userSubmit(params){
+        return request({
+            url:"/users/operate",
+            method:"post",
+            data:params,
+        })
+    },
+
+    getRoleAllList(){
         return request({
             url:"/roles/alllist",
             method:"get",
             data:{},
+            mock:true
+        })
+    },
+    getRoleList(){
+        return request({
+            url:"/roles/list",
+            method:"get",
+            data:{},
+            mock:true
+        })
+    },
+    roleOperate(params){
+        return request({
+            url:"/roles/operate",
+            method:"post",
+            data:params,
             mock:true
         })
     },
@@ -58,11 +89,5 @@ export default {
             mock:true
         })
     },
-    userSubmit(params){
-        return request({
-            url:"/users/operate",
-            method:"post",
-            data:params,
-        })
-    }
+
 }

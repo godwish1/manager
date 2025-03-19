@@ -6,12 +6,11 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 
 // https://vite.dev/config/
 export default defineConfig({
-  server:{
-    host:'localhost',
-    port:8080,
-    
+  server: {
+    host: 'localhost',
+    port: 8080,
+
     //增加代理用来访问后端接口
-    // 增加代理用来访问后端接口
     proxy: {
       '/api': {
         target: 'http://localhost:3000',
@@ -26,11 +25,16 @@ export default defineConfig({
   plugins: [
     vue(),
     //自动导入element-plus,懒加载
-    AutoImport({  
+    AutoImport({
       resolvers: [ElementPlusResolver()]
     }),
-    Components({ 
+    Components({
       resolvers: [ElementPlusResolver()]
     })
-  ]
+  ],
+  resolve: {
+    alias: {
+      '@': '/src' // 根据项目结构调整路径
+    }
+  }
 })

@@ -3,7 +3,7 @@
     <div :class="['nav-side',isCollapse?'fold':'unfold']">
       <!-- 系统LOGO -->
        <div class='logo'>
-        <img src="../assets/images/logo.png">
+        <img src="@/assets/images/logo.png">
         <span>Manager</span>
        </div>
        <!-- 导航菜单 -->
@@ -57,9 +57,9 @@
 </template>
 
 <script>
-
 import TreeMenu from './TreeMenu.vue';
 import BreadCrumb from './BreadCrumb.vue';
+import { eventBus } from '@/main.js';
 
 export default {
 
@@ -71,6 +71,9 @@ export default {
   },
   data() {
     return {
+      queryForm: {
+        menuState: 1,
+      },
       isCollapse: false,
       userInfo: this.$store.state.userInfo,
       noticeCount: 0,
@@ -80,8 +83,15 @@ export default {
   },
   mounted() {
     this.getNoticeCount();
-    this.getMenuList(); 
+    this.getMenuList();
+    // 监听menu.vue菜单更新事件
+    eventBus.on('menu-updated', this.getMenuList);
   },
+  // 组件销毁时移除监听
+  beforeDestroy() {
+    eventBus.off('menu-updated', this.getMenuList);
+  },
+
   methods: {
     toggle() {
       this.isCollapse = !this.isCollapse;

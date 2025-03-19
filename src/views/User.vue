@@ -107,7 +107,7 @@
 
 <script>
 import { getCurrentInstance, onMounted, reactive, ref, toRaw } from 'vue'
-import { ElMessage } from 'element-plus'; // 引入 ElMessage
+//import { ElMessage } from 'element-plus'; // 引入 ElMessage
 import utils from '../utils/utils';
 
 export default {
@@ -234,7 +234,7 @@ export default {
         onMounted(() => {
             getUserList();
             getDeptList();
-            getRoleList();
+            getRoleAllList();
         });
 
         // 获取用户列表
@@ -300,8 +300,8 @@ export default {
 
         };
 
-        const getRoleList = async () => {
-            let list = await proxy.$api.getRoleList();
+        const getRoleAllList = async () => {
+            let list = await proxy.$api.getRoleAllList();
             roleList.value = list;
         };
         // 新增用户弹窗的关闭
@@ -357,7 +357,7 @@ export default {
             handleSelectionChange,
             handleCreate,
             getDeptList,
-            getRoleList,
+            getRoleAllList,
             handleClose,
             handleSubmit,
             handleEdit,
