@@ -25,7 +25,6 @@ export default {
             url:"/menu/list",
             method:"get",
             data:params,
-            //mock:true
         })
     },
     menuSubmit(params){
@@ -40,6 +39,13 @@ export default {
             url:"/users/list",
             method:"get",
             data: params,
+        })
+    },
+    getAllUserList(){
+        return request({
+            url:"/users/all/list",
+            method:"get",
+            data: {},
         })
     },
     userDel(params){
@@ -62,15 +68,15 @@ export default {
             url:"/roles/alllist",
             method:"get",
             data:{},
-            mock:true
+            mock:false
         })
     },
-    getRoleList(){
+    getRoleList(params){
         return request({
             url:"/roles/list",
             method:"get",
-            data:{},
-            mock:true
+            data:params,
+
         })
     },
     roleOperate(params){
@@ -78,7 +84,6 @@ export default {
             url:"/roles/operate",
             method:"post",
             data:params,
-            mock:true
         })
     },
     roleUpdatePermission(params){
@@ -86,17 +91,23 @@ export default {
             url:"roles/update/permission",
             method:"post",
             data:params,
-            mock:true
         })
     },
     //部门列表
-    getDeptList(){
+    getDeptList(params){
         return request({
             url:"/dept/list",
             method:"get",
-            data:{},
-            mock:true
+            data:params,
         })
     },
+    deptOperate(params){
+        return request({
+            url:"/dept/operate",
+            method:"post",
+            data:params,
+        })
+    },
+
 
 }

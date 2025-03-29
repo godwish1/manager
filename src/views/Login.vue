@@ -36,15 +36,15 @@ export default {
     data(){
         return {
             user:{
-                userName:'',
-                userPwd:''
+                userName:'admin',
+                userPwd:'123456'
             },
             rules:{
                 userName:[
-                    {required:true,message:'请输入用户名',trigger:'blur'}
+                    {required:true, message:'请输入用户名', trigger:'blur'}
                 ],
                 userPwd:[
-                    {required:true,message:'请输入密码',trigger:'blur'},
+                    {required:true, message:'请输入密码', trigger:'blur'},
                     { min: 6, message: '密码长度不能少于 6 位', trigger: 'blur' }
                 ]
             }

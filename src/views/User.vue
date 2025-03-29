@@ -126,11 +126,13 @@ export default {
         });
         //初始化用户列表
         const userList = ref([]);
+        
         //分页器
         const pager = reactive({
             pageNum: 1,
             pageSize: 10
         });
+        
         //选中的用户列表对象
         const checkedUserIds = ref([]);
 

@@ -98,6 +98,7 @@ export default {
       queryForm: {
         //表单状态默认正常： 1 正常 | 2 停用
         menuState: 1,
+        menuName: "",
       },
 
       menuList: [],

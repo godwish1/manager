@@ -80,7 +80,7 @@ export default {
         menuState: 1,
       },
       isCollapse: false,
-      userInfo: this.$store.state.userInfo,
+      userInfo: this.$store.state.userInfo || {},
       noticeCount: 0,
       userMenu:[],
       activMenu: location.hash.slice(1)

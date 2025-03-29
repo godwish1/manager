@@ -45,6 +45,14 @@ const routes = [
                 },
                 component:()=>import("@/views/Role.vue") //懒加载
             },
+            {
+                name:"dept",
+                path:"/system/dept",
+                meta:{
+                    title:"角色管理"
+                },
+                component:()=>import("@/views/Dept.vue") //懒加载
+            },
 
       
         ]
