@@ -27,6 +27,14 @@ export default {
             data:params,
         })
     },
+
+    getPermissionList(){
+        return request({
+            url:"/users/getPermissionList",
+            method:"get",
+            data:{},
+        })
+    },
     menuSubmit(params){
         return request({
             url:"/menu/operate",

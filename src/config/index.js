@@ -6,7 +6,7 @@ const env = import.meta.env.MODE || "prod";
 const Envconfig = {
     dev:{
         baseApi:"/api",
-        mockApi:"http://localhost:7300/mock/67e69e773a73b1002c4624a5/api"
+        mockApi:"http://localhost:7300/mock/67ea4c1d17ca08002c6be368/api"
     },
     test:{
         baseApi:"//test.futurefe.com/api",

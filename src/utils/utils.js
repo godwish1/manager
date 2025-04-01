@@ -34,5 +34,29 @@ export default {
             });
         }
         return fmt;
+    },
+    // 递归生成用户路由
+    generateRoute(menuList) {
+        let routes = []
+        const deepList = (list) => {
+            while (list.length) {
+                let item = list.pop()
+                if (item.menuType == "1") {
+                    routes.push({
+                        name: item.component,
+                        path: item.path,
+                        meta: {
+                            title: item.menuName
+                        },
+                        component: item.component
+                    })
+                }
+                if (item.children) {
+                    deepList(item.children)
+                }
+            }
+        }
+        deepList(menuList)
+        return routes;
     }
 }

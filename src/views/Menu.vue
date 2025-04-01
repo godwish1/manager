@@ -20,7 +20,7 @@
 
     <div class="base-table">
       <div class="action">
-        <el-button type="primary" @click="handleAdd(1)">新 增</el-button>
+        <el-button type="primary" @click="handleAdd(1)" v-has="'menu-create'">新 增</el-button>
       </div>
       <!-- 渲染树形菜单要指定 row-key -->
       <el-table :data="menuList" row-key="_id" :tree-props="{ children: 'children' }">
@@ -31,9 +31,9 @@
         
         <el-table-column label="操作" width="250">
           <template #default="scope">
-            <el-button @click="handleAdd(2, scope.row)" type="primary" size="default">新 增</el-button>
-            <el-button @click="handleEdit(scope.row)" size="default">编 辑</el-button>
-            <el-button type="danger" size="default" @click="handleDel(scope.row._id)">删 除</el-button>
+            <el-button @click="handleAdd(2, scope.row)" type="primary" size="default" v-has="'menu-create'">新 增</el-button>
+            <el-button @click="handleEdit(scope.row)" size="default" v-has="'menu-edit'">编 辑</el-button>
+            <el-button type="danger" size="default" @click="handleDel(scope.row._id)" v-has="'menu-delete'">删 除</el-button>
           </template>
         </el-table-column>
       </el-table>

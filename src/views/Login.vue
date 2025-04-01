@@ -36,7 +36,7 @@ export default {
     data(){
         return {
             user:{
-                userName:'admin',
+                userName:'awzbox',
                 userPwd:'123456'
             },
             rules:{

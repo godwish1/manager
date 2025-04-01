@@ -14,7 +14,7 @@
 
     <div class="base-table">
       <div class="action">
-        <el-button type="primary" @click="handleAdd">创 建</el-button>
+        <el-button type="primary" @click="handleAdd" v-has="'role-create'">创 建</el-button>
       </div>
       <!-- 渲染树形菜单要指定 row-key -->
       <el-table :data="roleList">
@@ -24,9 +24,9 @@
         </el-table-column>
         <el-table-column label="操作" width="270">
           <template #default="scope">
-            <el-button size="default" @click="handleEdit(scope.row)">编 辑</el-button>
-            <el-button size="default" @click="handleOpenPermission(scope.row)">设置权限</el-button>
-            <el-button type="danger" size="default" @click="handleDel(scope.row._id)">删 除</el-button>
+            <el-button size="default" @click="handleEdit(scope.row)" v-has="'role-edit'">编 辑</el-button>
+            <el-button size="default" @click="handleOpenPermission(scope.row)" v-has="'role-edit-power'">设置权限</el-button>
+            <el-button size="default" type="danger" @click="handleDel(scope.row._id)" v-has="'role-delete'">删 除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -103,7 +103,6 @@ export default {
         {
           label: "角色名称",
           prop: "roleName",
-          width: 150,
         },
         {
           label: "备注",
@@ -112,7 +111,6 @@ export default {
         {
           label: "权限列表",
           prop: "permissionList",
-          width: 200,
 
           //此处用箭头函数使得this指向Vue组件实例
           formatter: (row, column, value) => {

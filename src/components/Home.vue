@@ -36,7 +36,6 @@
             type="danger" 
             @click="$router.push('/audit/approve')"
             :value="noticeCount">
-
             <el-icon class="bell-icon"><Bell /></el-icon>
           </el-badge>
           <!-- 下拉菜单 -->
@@ -81,7 +80,7 @@ export default {
       },
       isCollapse: false,
       userInfo: this.$store.state.userInfo || {},
-      noticeCount: 0,
+      noticeCount: '',
       userMenu:[],
       activMenu: location.hash.slice(1)
     };
@@ -89,6 +88,7 @@ export default {
   mounted() {
     this.getNoticeCount();
     this.getMenuList();
+
     // 监听menu.vue菜单更新事件
     eventBus.on('menu-updated', this.getMenuList);
   },
@@ -122,8 +122,11 @@ export default {
     },
     async getMenuList() {
       try {
-        const list = await this.$api.getMenuList();
-        this.userMenu = list;
+        const {menuList, actionList} = await this.$api.getPermissionList();
+        this.userMenu = menuList;
+        //保存用户权限到localStorage
+        this.$store.commit('saveUserAction', actionList);
+        this.$store.commit('saveUserMenu', menuList);
       } catch (error) {
         console.error(error);
       }
@@ -216,9 +219,9 @@ export default {
         }
 
         .bell-icon {
-          font-size: 24px; // 调整图标大小
-          margin-top: 1px;
-          color: #044a8f;
+          font-size: 28px; // 调整图标大小
+          margin-top: 0px;
+          color: #0f70ef;
         }
       }
     }

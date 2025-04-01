@@ -25,8 +25,8 @@
         
         <div class="base-table">
             <div class="action">
-                <el-button type="primary" @click="handleCreate">新 增</el-button>
-                <el-button type="danger" @click="handlePatchDel">批量删除</el-button>
+                <el-button type="primary" @click="handleCreate" v-has="'user-create'">新 增</el-button>
+                <el-button type="danger" @click="handlePatchDel" v-has="'user-patch-delete'">批量删除</el-button>
             </div>
 
             <!-- el-table-column中用prop属性来对应对象中的键名即可填入数据，用 label 属性来定义表格的列名。可以使用 width 属性来定义列宽。 -->
@@ -40,8 +40,8 @@
                 <!-- 自定义列 -->
                 <el-table-column label="操作" width="180">
                     <template #default="scope">
-                        <el-button @click="handleEdit(scope.row)">编 辑</el-button>
-                        <el-button type="danger" @click="handleDelete(scope.row)">删 除</el-button>
+                        <el-button @click="handleEdit(scope.row)" v-has="'user-edit'">编 辑</el-button>
+                        <el-button type="danger" @click="handleDelete(scope.row)" v-has="'user-delete'">删 除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
