@@ -31,8 +31,9 @@
         </el-table-column>
       </el-table>
 
-      <!-- 分页器 -->
+      
     </div>
+    <!-- 分页器 -->
     <div class="pagination-container">
       <el-pagination class="pagination" background layout="prev, pager, next, jumper" :total="pager.total"
         :page-size="pager.pageSize" @current-change="handleCurrentChange" />

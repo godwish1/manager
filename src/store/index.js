@@ -9,7 +9,8 @@ const state = {
 //   token: storage.getItem('token'),
   userInfo: storage.getItem('userInfo') || {}, //用户信息
   menuList: storage.getItem('menuList') || [],
-  actionList: storage.getItem('actionList') || []
+  actionList: storage.getItem('actionList') || [],
+  noticeCount: ''
 }
 export default createStore({
     state,

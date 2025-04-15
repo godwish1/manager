@@ -28,7 +28,7 @@
 
 
 <script>
-// import { User } from '@element-plus/icons-vue';
+import router from '@/router/index' //引入动态路由
 //options API 选项式API方法跳转 (vue2)
 export default {
     // 定义组件的名称为 "Login"
@@ -64,12 +64,15 @@ export default {
                 if (valid) {
                     this.$api.login(this.user).then(res => {
                         this.$store.commit('saveUserInfo', res); //保存用户信息到localStorage
-                        this.$router.push('/welcome')
-                        ElMessage.success(response.data.msg || '登录成功');//添加成功提示
+                        // 登录成功后强制加载动态路由
+                        router.loadAsyncRoutes().then(() => {
+                            this.$router.push('/welcome'); // 跳转到欢迎页
+                        });
+                        ElMessage.success(res.msg || '登录成功');//添加成功提示
                     })
                    
                 } else {
-                    ElMessage.error(response.data.msg || '登录失败');
+                    ElMessage.error(res.msg || '登录失败');
                     return false;
                 }
             });

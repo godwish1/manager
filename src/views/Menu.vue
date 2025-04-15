@@ -39,7 +39,7 @@
       </el-table>
     </div>
 
-    <el-dialog title="用户新增" v-model="showModal">
+    <el-dialog title="菜单管理" v-model="showModal">
       <el-form ref="dialogForm" :model="menuForm" label-width="100px" :rules="rules">
         <el-form-item label="父级菜单" prop="parentId">
           <el-cascader v-model="menuForm.parentId" :options="menuList"
@@ -48,8 +48,8 @@
         </el-form-item>
         <el-form-item label="菜单类型" prop="menuType">
           <el-radio-group v-model="menuForm.menuType">
-            <el-radio :label="1">菜 单</el-radio>
-            <el-radio :label="2">按 钮</el-radio>
+            <el-radio :label="'1'">菜 单</el-radio>
+            <el-radio :label="'2'">按 钮</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="菜单名称" prop="menuName">

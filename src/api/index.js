@@ -11,15 +11,6 @@ export default {
         })
     },
 
-    noticeCount(params){
-        return request({
-            url:"/leave/count",
-            method:"get",
-            data:{},
-            mock:true //单独走mock
-        })
-    },
-
     getMenuList(params){
         return request({
             url:"/menu/list",
@@ -116,6 +107,34 @@ export default {
             data:params,
         })
     },
+    getApplyList(params){
+        return request({
+            url:"/leave/list",
+            method:"get",
+            data:params,
+            
+        })
+    },
+    leaveOperate(params){
+        return request({
+            url:"/leave/operate",
+            method:"post",
+            data:params,
+        })
+    },
+    leaveApprove(params){
+        return request({
+            url:"/leave/approve",
+            method:"post",
+            data:params,
+        })
+    },
 
-
+    noticeCount(){
+        return request({
+            url:"/leave/count",
+            method:"get",
+            data:{},
+        })
+    },
 }

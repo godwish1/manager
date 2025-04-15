@@ -22,7 +22,7 @@
                 </el-form-item>
             </el-form>
         </div>
-        
+
         <div class="base-table">
             <div class="action">
                 <el-button type="primary" @click="handleCreate" v-has="'user-create'">新 增</el-button>
@@ -45,6 +45,7 @@
                     </template>
                 </el-table-column>
             </el-table>
+
             <!-- 分页器 -->
             <el-pagination class="pagination" background layout="prev, pager, next, jumper" :total="pager.total"
                 :page-size="pager.pageSize" @current-change="handleCurrentChange" />
@@ -126,13 +127,14 @@ export default {
         });
         //初始化用户列表
         const userList = ref([]);
-        
+
         //分页器
         const pager = reactive({
             pageNum: 1,
-            pageSize: 10
+            pageSize: 10,
+            total: 0
         });
-        
+
         //选中的用户列表对象
         const checkedUserIds = ref([]);
 
@@ -141,7 +143,14 @@ export default {
 
         //新增用户对象
         const user = reactive({
-            state: 3
+            userId: '',
+            userName: '',
+            userEmail: '',
+            mobile: '',
+            job: '',
+            state: 3,
+            roleList: [],
+            deptId: []
         });
 
         //角色列表
@@ -160,7 +169,7 @@ export default {
             userEmail: [
                 { required: true, message: '请输入邮箱地址', trigger: 'blur' },
                 {
-                    pattern:  /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/, 
+                    //pattern: /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/,
                     message: '邮箱格式不正确(例如: name@example.com)',
                     trigger: 'blur'
                 }

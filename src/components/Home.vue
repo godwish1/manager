@@ -1,42 +1,41 @@
 <template>
   <div class="basic-layout">
-    <div :class="['nav-side',isCollapse?'fold':'unfold']">
+    <div :class="['nav-side', isCollapse ? 'fold' : 'unfold']">
       <!-- 系统LOGO -->
-       <div class='logo'>
+      <div class='logo'>
         <img src="@/assets/images/logo.png">
         <span>Manager</span>
-       </div>
-       <!-- 导航菜单 -->
-        <el-menu 
-          router
-        :default-active="activMenu" 
-        :collapse="isCollapse"  
-        background-color="#001529" 
-        text-color="#fff"
+      </div>
+      <!-- 导航菜单 -->
+      <el-menu router :default-active="activMenu" :collapse="isCollapse" background-color="#001529" text-color="#fff"
         class="nav-menu">
         <!-- 传递菜单到树形菜单 -->
-        <TreeMenu :userMenu="userMenu"/>
-        </el-menu>
+        <TreeMenu :userMenu="userMenu" />
+      </el-menu>
     </div>
-    <div :class='["content-right",isCollapse?"unfold":"fold"]'>
+    <div :class='["content-right", isCollapse ? "unfold" : "fold"]'>
       <div class="nav-top">
         <div class="nav-left">
           <div class="menu-fold" @click="toggle">
-            <el-icon style="font-size: 25px;padding: 20px;"><Fold /></el-icon>
+            <el-icon style="font-size: 25px;padding: 20px;">
+              <Fold />
+            </el-icon>
           </div>
           <div class="bread">
-            <BreadCrumb/>
+            <BreadCrumb />
           </div>
         </div>
         <div class="user-info">
-           <!-- Bell按钮 + 通知角标提示，注释的是显示圆点提示  
+          <!-- Bell按钮 + 通知角标提示，注释的是显示圆点提示  
             :is-dot="noticeCount > 0 ? true : false" -->
           <el-badge 
             class="notice" 
             type="danger" 
-            @click="$router.push('/audit/approve')"
-            :value="noticeCount">
-            <el-icon class="bell-icon"><Bell /></el-icon>
+            @click="$router.push('/audit/approve')" 
+            :value="noticeCount>0 ? noticeCount : ''">
+            <el-icon class="bell-icon">
+              <Bell />
+            </el-icon>
           </el-badge>
           <!-- 下拉菜单 -->
           <el-dropdown @command="handleLogout">
@@ -54,7 +53,7 @@
         </div>
       </div>
       <div class="wrapper">
-          <router-view></router-view>
+        <router-view></router-view>
       </div>
     </div>
   </div>
@@ -70,9 +69,10 @@ export default {
   name: "Home",
 
   components: { // 注册子组件
-      TreeMenu,
-      BreadCrumb
+    TreeMenu,
+    BreadCrumb
   },
+
   data() {
     return {
       queryForm: {
@@ -81,10 +81,17 @@ export default {
       isCollapse: false,
       userInfo: this.$store.state.userInfo || {},
       noticeCount: '',
-      userMenu:[],
+      userMenu: [],
       activMenu: location.hash.slice(1)
     };
   },
+  // noticeCount的值在Store中变化时，计算属性会自动重新计算noticeCount
+  computed: {
+    noticeCount() {
+      return this.$store.state.noticeCount;
+    }
+  },
+
   mounted() {
     this.getNoticeCount();
     this.getMenuList();
@@ -113,16 +120,14 @@ export default {
     async getNoticeCount() {
       try {
         const count = await this.$api.noticeCount();
-        //这里noticeCount可以直接返回3是因为request.js中设置了code==200，直接返回data
-        this.noticeCount = count;  
+        this.$store.commit('saveNoticeCount', count);// 保存通知数量到store
       } catch (error) {
-        console.error(error);
+        ElMessage.error('网络请求异常，请稍后重试'); // 使用ElementUI消息提示
       }
-
     },
     async getMenuList() {
       try {
-        const {menuList, actionList} = await this.$api.getPermissionList();
+        const { menuList, actionList } = await this.$api.getPermissionList();
         this.userMenu = menuList;
         //保存用户权限到localStorage
         this.$store.commit('saveUserAction', actionList);
@@ -130,7 +135,6 @@ export default {
       } catch (error) {
         console.error(error);
       }
-
     }
   }
 }
@@ -149,25 +153,30 @@ export default {
     color: #fff;
     overflow-y: auto;
     transition: width .5s;
+
     .logo {
       display: flex;
       align-items: center;
       font-size: 18px;
       height: 50px;
+
       img {
         margin: 0 6px;
         width: 64px;
         height: 50px;
       }
     }
+
     .nav-menu {
       height: calc(100vh - 50px);
       border-right: none;
     }
+
     // 合并
     &.fold {
       width: 64px;
     }
+
     // 展开
     &.unfold {
       width: 200px;
