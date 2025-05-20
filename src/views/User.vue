@@ -52,7 +52,7 @@
         </div>
 
         <!-- 定义新增弹窗 通过v-model方式 控制弹窗显示 -->
-        <el-dialog title="用户新增" v-model="showModal">
+        <el-dialog title="用户新增" v-model="showModal" @close="handleClose">
             <el-form ref="dialogForm" :model="user" label-width="100px" :rules="rules">
 
                 <el-form-item label="用户名" prop="userName">

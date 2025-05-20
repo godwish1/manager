@@ -61,7 +61,7 @@ async function loadAsyncRoutes() {
             let routes = utils.generateRoute(menuList);
             //console.log('routes:', routes);
             routes.forEach(route => {
-                let url = `../views/${route.component}.vue`;
+                let url = `../views/${route.component}.vue`; //不能用@
                 route.component = () => import(/* @vite-ignore */ url);
                 router.addRoute("home", route);
             });

@@ -3,13 +3,13 @@
     <div :class="['nav-side', isCollapse ? 'fold' : 'unfold']">
       <!-- 系统LOGO -->
       <div class='logo'>
-        <img src="@/assets/images/logo.png">
+        <img src="@/assets/images/logo1.png">
         <span>Manager</span>
       </div>
       <!-- 导航菜单 -->
       <el-menu router :default-active="activMenu" :collapse="isCollapse" background-color="#001529" text-color="#fff"
         class="nav-menu">
-        <!-- 传递菜单到树形菜单 -->
+        <!-- 传递用户菜单到树形菜单 -->
         <TreeMenu :userMenu="userMenu" />
       </el-menu>
     </div>
@@ -28,11 +28,8 @@
         <div class="user-info">
           <!-- Bell按钮 + 通知角标提示，注释的是显示圆点提示  
             :is-dot="noticeCount > 0 ? true : false" -->
-          <el-badge 
-            class="notice" 
-            type="danger" 
-            @click="$router.push('/audit/approve')" 
-            :value="noticeCount>0 ? noticeCount : ''">
+          <el-badge class="notice" type="danger" @click="$router.push('/audit/approve')"
+            :value="noticeCount > 0 ? noticeCount : ''">
             <el-icon class="bell-icon">
               <Bell />
             </el-icon>
@@ -87,6 +84,10 @@ export default {
   },
   // noticeCount的值在Store中变化时，计算属性会自动重新计算noticeCount
   computed: {
+    // 动态获取当前路由路径
+    activMenu() {
+      return this.$route.path; //解决点击通知跳转后左侧导航栏未高亮的问题
+    },
     noticeCount() {
       return this.$store.state.noticeCount;
     }
@@ -158,12 +159,12 @@ export default {
       display: flex;
       align-items: center;
       font-size: 18px;
-      height: 50px;
+      height: 75px;
 
       img {
         margin: 0 6px;
-        width: 64px;
-        height: 50px;
+        width: 70px;
+        height: 65px;
       }
     }
 

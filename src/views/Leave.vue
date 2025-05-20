@@ -45,7 +45,7 @@
                 :page-size="pager.pageSize" @current-change="handleCurrentChange" />
         </div>
 
-        <el-dialog title="申请休假" v-model="showModal" width="70%">
+        <el-dialog title="申请休假" v-model="showModal" width="70%" @close="handleClose('dialogForm')">
             <el-form ref="dialogForm" :model="leaveForm" label-width="100px" :rules="rules">
                 <el-form-item label="休假类型" prop="applyType">
                     <el-select v-model="leaveForm.applyType" placeholder="Select" clearable>

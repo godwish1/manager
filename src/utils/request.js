@@ -33,7 +33,7 @@ service.interceptors.response.use((res) => {
     //debugger;
     if (code === 200) { // 如果状态码是 200，表示成功
         return data; // 返回数据
-    } else if (code === 50001) { // 如果状态码是 40001，表示 Token 失效
+    } else if (code === 50001) { // 如果状态码是 50001，表示 Token 失效
         ElMessage.error(TOKEN_INVALID); // 显示 Token 失效的错误消息
         setTimeout(() => {
             router.push('/login'); // 1.5秒后重定向到登录页面

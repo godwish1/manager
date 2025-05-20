@@ -42,7 +42,7 @@
         </div>
 
         <!-- 申请详情弹窗 -->
-        <el-dialog title="审核" v-model="showDetailModal" width="50%" destroy-on-close>
+        <el-dialog title="审核" v-model="showDetailModal" width="50%" destroy-on-close >
             <el-form :model="auditForm" ref="dialogForm" label-width="100px" label-suffix=":" :rules="rules">
                 <el-form-item label="申请人">
                     <div>{{ detail.applyUser.userName }}</div>

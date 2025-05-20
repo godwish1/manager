@@ -40,7 +40,7 @@
     </div>
 
     <!-- 弹窗 -->
-    <el-dialog title="角色新增" v-model="showModal">
+    <el-dialog title="角色新增" v-model="showModal" @close="handleClose">
       <el-form ref="dialogForm" :model="roleForm" label-width="100px" :rules="rules">
 
         <el-form-item label="角色名称" prop="roleName">
@@ -254,8 +254,9 @@ export default {
 
     // 弹框关闭
     handleClose() {
-      this.handleReset("dialogForm");
       this.showModal = false;
+      this.handleReset("dialogForm");
+      
     },
 
     // 分页器切换事件

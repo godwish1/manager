@@ -1,7 +1,7 @@
 <template>
     <div class="login-wrapper">
         <div class="modal">
-            <el-form ref="userForm" :model="user" :rules="rules" status-icon>
+            <el-form ref="userForm" :model="user" :rules="rules" status-icon @keyup.enter.native="login">
                 <div class="login-title">登录</div>
                 <el-form-item prop="userName">
                     <el-input type="text" v-model="user.userName" placeholder="请输入用户名" clearable>
@@ -18,7 +18,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button class="btn-login" type="primary" @click="login">登录</el-button>
+                    <el-button class="btn-login" type="primary" @click="login">登 录</el-button>
                 </el-form-item>
 
             </el-form>
