@@ -1,5 +1,9 @@
 <<<<<<< HEAD
-# Vue 3 + Vite + ElementPlus
+# Vue 3 + Vite + ElementPlus 
+
+# 运行
+npm run dev
+
 Login
 <img width="1867" height="883" alt="image" src="https://github.com/user-attachments/assets/4ecca2af-1616-4105-96a2-08b24a28cf61" />
 
