@@ -22,3 +22,5 @@ yarn-debug.log*
 
 # 安全文件
 .env.local
+dist.zip
+README.md
