@@ -45,26 +45,27 @@
                     </template>
                 </el-table-column>
             </el-table>
-
-            <!-- 分页器 -->
+        </div>
+        <!-- 分页器 -->
+        <div class="pagination-container">
             <el-pagination class="pagination" background layout="prev, pager, next, jumper" :total="pager.total"
                 :page-size="pager.pageSize" @current-change="handleCurrentChange" />
         </div>
 
         <!-- 定义新增弹窗 通过v-model方式 控制弹窗显示 -->
-        <el-dialog title="用户新增" v-model="showModal" @close="handleClose">
+        <el-dialog :title="action == 'add' ? '用户新增' : '用户编辑'" v-model="showModal" @close="handleClose">
+
             <el-form ref="dialogForm" :model="user" label-width="100px" :rules="rules">
 
                 <el-form-item label="用户名" prop="userName">
-                    <!-- 编辑时候用户名和邮箱不可修改 -->
+                    <!-- 编辑时候用户名和密码不可修改 -->
                     <el-input v-model="user.userName" placeholder="请输入用户名" :disabled="action === 'edit'" />
                 </el-form-item>
+                <el-form-item :label="action == 'add' ? '密码' : '重置密码'" prop="userPwd">
+                    <el-input v-model="user.userPwd" placeholder="如果需要重置密码，请输入新密码" />
+                </el-form-item>
                 <el-form-item label="邮箱" prop="userEmail">
-
-                    <el-input v-model="user.userEmail" placeholder="请输入邮箱(例如: xxx@xxx.com)"
-                        :disabled="action === 'edit'">
-                    </el-input>
-
+                    <el-input v-model="user.userEmail" placeholder="请输入邮箱(例如: xxx@xxx.com)" />
                 </el-form-item>
                 <el-form-item label="手机号" prop="mobile">
                     <el-input v-model="user.mobile" placeholder="请输入手机号" />
@@ -108,18 +109,14 @@
 
 <script>
 import { getCurrentInstance, onMounted, reactive, ref, toRaw } from 'vue'
-//import { ElMessage } from 'element-plus'; // 引入 ElMessage
 import utils from '../utils/utils';
-
+import storage from '../utils/storage';
 export default {
     name: "user",
     setup() {
         // 获取composition API 上下文对象
         // 正确获取全局 $api || 区别于home中可以通过this.$api获取
         let { proxy } = getCurrentInstance();
-
-
-        //ref和reactive创建响应式对象
 
         //初始化用户表单对象
         const userForm = reactive({
@@ -145,6 +142,7 @@ export default {
         const user = reactive({
             userId: '',
             userName: '',
+            userPwd: '',
             userEmail: '',
             mobile: '',
             job: '',
@@ -166,6 +164,11 @@ export default {
             userName: [
                 { required: true, message: '请输入用户名', trigger: 'blur' },  //添加正则
             ],
+            userPwd: [
+                { message: '请输入密码', trigger: 'blur' },
+                { min: 6, max: 20, message: '密码长度在 6 到 20 个字符', trigger: 'blur' },
+            ],
+
             userEmail: [
                 { required: true, message: '请输入邮箱地址', trigger: 'blur' },
                 {
@@ -258,7 +261,6 @@ export default {
             } catch (error) {
                 console.error('请求出错', error) // 添加错误日志
             }
-
         };
         // 查询事件，获取用户列表
         const handleQuery = () => {
@@ -269,30 +271,63 @@ export default {
             proxy.$refs[form].resetFields(); // 重置表单  上面一定要配置prop
         };
         // 分页器切换事件
-        const handleCurrentChange = (pageNum) => {
-            pager.pageNum = pageNum;
+        const handleCurrentChange = (currentPage) => {
+            pager.pageNum = currentPage; // 更新当前页码
             getUserList();
         };
         // 删除单个用户
         const handleDelete = async (row) => {
-            await proxy.$api.userDel({ userIds: row.userId }) //可单个删除，也可以多个删除
-            ElMessage.success('删除成功');
-            getUserList();
+            try {
+                // 使用 ElMessageBox 替代 proxy.$confirm
+                await ElMessageBox.confirm(
+                    '将永久删除用户：' + row.userName + '，是否继续？',
+                    '警告',
+                    {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'error'
+                    }
+                );
+
+                // 发送删除请求
+                const res = await proxy.$api.userDel({ userIds: [row.userId] });
+                // ✅ 使用 data.message 中的动态信息
+                ElMessage.success(res.message || '用户已永久删除');
+                getUserList();
+
+            } catch (error) {
+                // 区分取消操作和其他错误
+                if (error === 'cancel') {
+                    ElMessage.info('已取消删除');
+                } else {
+                    ElMessage.error('删除失败');
+                }
+            }
         };
-        // 批量删除用户
+        // 批量删除
         const handlePatchDel = async () => {
             if (!checkedUserIds.value.length) {
                 return ElMessage.error('请选择要删除的用户');
             }
-            const res = await proxy.$api.userDel({ userIds: checkedUserIds.value });
 
-            if (res.modifiedCount > 0) {
-                ElMessage.success('删除成功');
+            try {
+                // 使用 ElMessageBox 替代 proxy.$confirm
+                await ElMessageBox.confirm(
+                    '此操作将永久删除该用户，是否继续？',
+                    '警告',
+                    {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'error'
+                    }
+                );
+
+                const res = await proxy.$api.userDel({ userIds: checkedUserIds.value });
+                ElMessage.success(`共删除用户${res.deletedCount}条`);
                 getUserList();
-            } else {
+            } catch (error) {
                 ElMessage.error('删除失败');
             }
-
         };
         //表格多选
         const handleSelectionChange = (selection) => {
@@ -303,6 +338,14 @@ export default {
         const handleCreate = () => {
             action.value = 'add';
             showModal.value = true;
+        };
+        //用户编辑
+        const handleEdit = (row) => {
+            action.value = 'edit';
+            showModal.value = true;
+            proxy.$nextTick(() => {
+                Object.assign(user, row);
+            });
         };
 
         const getDeptList = async () => {
@@ -320,29 +363,43 @@ export default {
             showModal.value = false; // 弹窗属性设置为false
             handleReset("dialogForm"); // 调用上面函数重置表单
         };
+
         // 用户弹窗的提交
         const handleSubmit = () => {
             proxy.$refs.dialogForm.validate(async (valid) => {
                 if (valid) {
-                    let params = toRaw(user); // 获取表单数据
-                    //params.userEmail += '@qq.com';
+                    // 1. 转换原始数据
+                    let params = toRaw(user);
+
+                    // 2. 处理密码逻辑
+                    if (action.value === 'edit' && !params.userPwd) {
+                        delete params.userPwd; // 删除空密码字段
+                    }
+
+                    // 3. 添加操作类型
                     params.action = action.value;
+
+                    // ✅ 新增：从 localStorage 获取当前登录用户的 userId
+                    const userInfo = storage.getItem('userInfo'); // 假设用户信息存储在 key 为 'userInfo' 中
+                    if (userInfo && userInfo.userId) {
+                        params.loginUserId = userInfo.userId; // 将当前登录用户ID加入请求参数
+                    }
+                    // 4. 发送请求
                     let res = await proxy.$api.userSubmit(params);
+
+                    // 5. 提示信息
                     showModal.value = false;
-                    ElMessage.success('用户创建成功');
+
+                    if (action.value == 'add') {
+                        ElMessage.success('用户创建成功');
+                    } else {
+                        ElMessage.success('用户信息更新成功');
+                    }
+
+                    // 6. 清理表单
                     handleReset("dialogForm");
                     getUserList();
-
                 }
-            });
-        };
-
-        //用户编辑
-        const handleEdit = (row) => {
-            action.value = 'edit';
-            showModal.value = true;
-            proxy.$nextTick(() => {
-                Object.assign(user, row);
             });
         };
 

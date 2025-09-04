@@ -7,7 +7,7 @@
         <span>Manager</span>
       </div>
       <!-- 导航菜单 -->
-      <el-menu router :default-active="activMenu" :collapse="isCollapse" background-color="#001529" text-color="#fff"
+      <el-menu router :default-active="activeMenu" :collapse="isCollapse" background-color="#001529" text-color="#fff"
         class="nav-menu">
         <!-- 传递用户菜单到树形菜单 -->
         <TreeMenu :userMenu="userMenu" />
@@ -77,15 +77,15 @@ export default {
       },
       isCollapse: false,
       userInfo: this.$store.state.userInfo || {},
-      noticeCount: '',
+      //noticeCount: '',
       userMenu: [],
-      activMenu: location.hash.slice(1)
+      //activeMenu: location.hash.slice(1)
     };
   },
   // noticeCount的值在Store中变化时，计算属性会自动重新计算noticeCount
   computed: {
     // 动态获取当前路由路径
-    activMenu() {
+    activeMenu() {
       return this.$route.path; //解决点击通知跳转后左侧导航栏未高亮的问题
     },
     noticeCount() {

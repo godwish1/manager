@@ -30,9 +30,8 @@
           </template>
         </el-table-column>
       </el-table>
-
-      
     </div>
+    
     <!-- 分页器 -->
     <div class="pagination-container">
       <el-pagination class="pagination" background layout="prev, pager, next, jumper" :total="pager.total"

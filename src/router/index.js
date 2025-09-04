@@ -61,8 +61,8 @@ async function loadAsyncRoutes() {
             let routes = utils.generateRoute(menuList);
             //console.log('routes:', routes);
             routes.forEach(route => {
-                let url = `../views/${route.component}.vue`; //不能用@
-                route.component = () => import(/* @vite-ignore */ url);
+                // let url = `@/views/${route.component}.vue`; //不能用@
+                // route.component = () => import(/* @vite-ignore */ url);
                 router.addRoute("home", route);
             });
             isRoutesLoaded = true;
@@ -81,7 +81,7 @@ async function loadAsyncRoutes() {
 
 //全局前置守卫
 router.beforeEach(async (to, from, next) => {
-    console.log('导航守卫执行:', to.path);
+    //console.log('导航守卫执行:', to.path);
     const userInfo = storage.getItem('userInfo') || {};
 
     if (!userInfo.token && to.path !== '/login') {

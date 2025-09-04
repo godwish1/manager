@@ -19,10 +19,7 @@ export default {
             return this.$route.matched;
         }
     },
-    mounted() {
-        console.log("routes=>",this.$route);
-            
-    },
+
 }
 </script>
 

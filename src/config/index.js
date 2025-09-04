@@ -2,7 +2,10 @@
  * 环境配置封装
  * 项目级别的地址配置都放到config这里
  */
-const env = import.meta.env.MODE || "prod";
+// const env = import.meta.env.NODE_ENV || "prod";
+const env = import.meta.env.VITE_APP_ENV || 'prod'; 
+// const baseApi = import.meta.env.VITE_APP_API_URL || "/api";
+
 const Envconfig = {
     dev:{
         baseApi:"/api",
@@ -13,7 +16,7 @@ const Envconfig = {
         mockApi:"http://localhost:7300/mock/67cff7be1c230d00279eec08/api"
     },
     prod:{
-        baseApi:"//futurefe.com/api",
+        baseApi: "/api",
         mockApi:"http://localhost:7300/mock/67cff7be1c230d00279eec08/api"
     },
 }

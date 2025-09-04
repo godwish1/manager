@@ -29,6 +29,7 @@
 
 <script>
 import router from '@/router/index' //引入动态路由
+
 //options API 选项式API方法跳转 (vue2)
 export default {
     // 定义组件的名称为 "Login"
@@ -36,8 +37,8 @@ export default {
     data(){
         return {
             user:{
-                userName:'awzbox',
-                userPwd:'123456'
+                userName:'',
+                userPwd:''
             },
             rules:{
                 userName:[
@@ -63,7 +64,8 @@ export default {
             this.$refs.userForm.validate((valid) => {
                 if (valid) {
                     this.$api.login(this.user).then(res => {
-                        this.$store.commit('saveUserInfo', res); //保存用户信息到localStorage
+                        this.$store.commit('saveUserInfo', res); //保存用户信息到vuex
+
                         // 登录成功后强制加载动态路由
                         router.loadAsyncRoutes().then(() => {
                             this.$router.push('/welcome'); // 跳转到欢迎页

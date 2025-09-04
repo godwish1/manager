@@ -48,7 +48,9 @@ export default {
                         meta: {
                             title: item.menuName
                         },
-                        component: item.component
+                        //component: item.component
+                        // 关键修改：使用动态导入函数
+                        component: () => import(`@/views/${item.component}.vue`)
                     })
                 }
                 if (item.children) {
