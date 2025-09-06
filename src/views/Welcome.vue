@@ -22,7 +22,7 @@ export default {
 </script>
 
 
-<style scoped>
+<style scoped lang="scss">
 .welcome {
     display: flex;
     justify-content: center;

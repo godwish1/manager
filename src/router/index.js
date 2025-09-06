@@ -41,7 +41,7 @@ const routes = [
             title: "页面不存在"
         },
         component: () => import("@/views/404.vue")
-    }
+    },
 ]
 //创建路由对象
 const router = createRouter({

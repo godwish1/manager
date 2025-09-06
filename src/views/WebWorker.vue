@@ -1,16 +1,17 @@
-<template>
-  <div class="excel-container">
-    <h2>数据导出</h2>
-    <button @click="exportExcel" class="export-btn">导出10万条数据</button>
-    <p v-if="loading">正在生成数据，请稍候...</p>
-    <p v-else-if="success">导出成功！</p>
-  </div>
-  <div class="excel-container">
-      <textarea name="textarea1" cols="30" rows="5"></textarea>
-      <button @click="handleSubmit" class="export-btn">Submit</button>
-  </div>
-
-</template>
+  <template>
+    <div>
+      <div class="excel-container">
+        <h2>数据导出</h2>
+        <button @click="exportExcel" class="export-btn">导出10万条数据</button>
+        <p v-if="loading">正在生成数据，请稍候...</p>
+        <p v-else-if="success">导出成功！</p>
+      </div>
+      <div class="excel-container">
+          <textarea name="textarea1" cols="30" rows="5"></textarea>
+          <button @click="handleSubmit" class="export-btn">Submit</button>
+      </div>
+    </div>
+  </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
@@ -19,7 +20,7 @@ const loading = ref(false);
 const success = ref(false);
 
 // 创建Web Worker
-let worker = new Worker('/excel.js');
+let worker = new Worker('http://localhost:8080/excel.js');
 
 // 监听来自Web Worker的消息
 worker.onmessage = (event) => {
